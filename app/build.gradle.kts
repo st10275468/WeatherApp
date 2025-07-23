@@ -1,8 +1,16 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-}
 
+
+
+}
+val apikeyPropertiesFile = rootProject.file("apikey.properties")
+val apikeyProperties = Properties()
+apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 android {
     namespace = "vcmsa.projects.weatherapp"
     compileSdk = 35
@@ -14,7 +22,15 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "ACCUWEATHER_API_KEY",
+            apikeyProperties["ACCUWEATHER_API_KEY"].toString())
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildFeatures{
+            buildConfig = true
+            viewBinding = true
+        }
     }
 
     buildTypes {
